@@ -1,4 +1,5 @@
 require 'csv'
+require 'date'
 puts 'EventManager initialized.'
 
 contents = CSV.open(
@@ -6,6 +7,13 @@ contents = CSV.open(
   headers: true,
   header_converters: :symbol
 )
+hours = []
+contents.each do |row|
+  hour = row[:regdate].split()
+  hour.shift
+  hours << hour.jo
+end
+p hours
 
 def clean_phone_numbers(number)
   plain_number = number.gsub(/[^\d]+/ , '')
@@ -17,6 +25,10 @@ def clean_phone_numbers(number)
   'Bad Number'
 end
 
+
 contents.each do |row|
   puts clean_phone_numbers(row[:homephone])
 end
+
+
+
