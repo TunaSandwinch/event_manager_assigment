@@ -7,13 +7,24 @@ contents = CSV.open(
   headers: true,
   header_converters: :symbol
 )
-hours = []
-contents.each do |row|
-  hour = row[:regdate].split()
-  hour.shift
-  hours << hour.jo
+
+def fetch_hours(date)
+  hours = []
+  date.each do |row|
+    hour = row[:regdate].split()
+    hour.shift
+    hour = hour.join.split('')
+    hour.length == 5 ? hours << "#{hour[0, 2].join}:00" : hours << "#{hour[0, 1].join}:00"
+  end
+  hours
 end
-p hours
+
+hours = fetch_hours(contents)
+hours.each do |hour|
+  p "#{hour}: #{hours.count(hour)}"
+end
+
+
 
 def clean_phone_numbers(number)
   plain_number = number.gsub(/[^\d]+/ , '')
@@ -26,9 +37,9 @@ def clean_phone_numbers(number)
 end
 
 
-contents.each do |row|
-  puts clean_phone_numbers(row[:homephone])
-end
+# contents.each do |row|
+#   puts clean_phone_numbers(row[:homephone])
+# end
 
 
 
