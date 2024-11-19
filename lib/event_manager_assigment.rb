@@ -35,7 +35,40 @@ def date_frequencies(csv_file)
   end
 end
 
-p date_frequencies(contents)
-# contents.each do |row|
-#   puts clean_phone_numbers(row[:homephone])
-# end
+def hour_frequencies(csv_file)
+  regdate_list = regdates(csv_file)
+  csv_file.reduce(Hash.new(0)) do |container, row|
+    hour = DateTime.strptime(row[:regdate], '%m/%d/%Y %H:%M').strftime('%I:00 %p')
+    container[hour] = regdate_list.count(hour)
+    container
+  end
+end
+
+def peak_days(csv_file)
+  date_frequencies = date_frequencies(csv_file)
+  peak_frequency = date_frequencies.values.max
+  date_frequencies.map do |key, value|
+    puts key if value == peak_frequency
+  end
+end
+
+def peak_hours(csv_file)
+  hour_frequencies = hour_frequencies(csv_file)
+  peak_frequency = hour_frequencies.values.max
+  hour_frequencies.map do |key, value|
+    puts key if value == peak_frequency
+  end
+end
+
+
+
+contents.each do |row|
+  puts clean_phone_numbers(row[:homephone])
+end
+puts "the peak day/s:"
+peak_days(contents)
+puts "the peak hour/s:"
+peak_hours(contents)
+
+
+
